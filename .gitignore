@@ -1,0 +1,38 @@
+# .gitignore — .NET MAUI / Visual Studio
+.vs/
+.vscode/
+*.user
+*.suo
+*.sln.docstates
+
+# Build output
+bin/
+obj/
+**/bin/
+**/obj/
+**/Debug/
+**/Release/
+
+# Common intermediates & caches
+**/*.pdb
+**/*.mdb
+**/*.log
+**/*.cache
+**/*.stamp
+
+# MAUI/Android intermediates often seen in obj/
+**/obj/**/lp/
+**/obj/**/res/
+**/obj/**/resizetizer/
+
+# NuGet
+packages/
+.nuget/
+**/project.assets.json
+
+# JetBrains Rider
+.idea/
+*.DotSettings.user
+
+# Misc
+*.DS_Store
