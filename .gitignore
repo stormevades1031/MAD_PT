@@ -36,3 +36,6 @@ packages/
 
 # Misc
 *.DS_Store
+
+# Local secrets (do not commit)
+**/*.Secrets.cs

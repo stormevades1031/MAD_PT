@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:MAD_FINAL.ViewModels"
+             xmlns:models="clr-namespace:MAD_FINAL.Models"
+             x:Class="MAD_FINAL.HistoryPage"
+             x:DataType="viewModels:HistoryPageViewModel"
+             BackgroundColor="{StaticResource OffBlack}">
+
+    <Grid RowDefinitions="Auto,Auto,*" ColumnDefinitions="*" Padding="16,24" RowSpacing="14">
+        <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto" RowSpacing="6">
+            <Label Text="Trip History" FontFamily="OpenSansSemibold" FontSize="28" TextColor="{StaticResource White}" />
+            <Label Grid.Row="1" Text="Swipe left to delete a record." FontSize="13" TextColor="{StaticResource Gray300}" />
+
+            <Button Grid.Column="1"
+                    Grid.RowSpan="2"
+                    Text="Refresh"
+                    Command="{Binding RefreshCommand}"
+                    BackgroundColor="{StaticResource Gray950}"
+                    TextColor="{StaticResource White}"
+                    CornerRadius="12"
+                    Padding="14,10" />
+        </Grid>
+
+        <Border Grid.Row="1" BackgroundColor="{StaticResource Gray900}" StrokeThickness="0" Padding="14">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="16" />
+            </Border.StrokeShape>
+            <Label Text="{Binding Status}" TextColor="{StaticResource Gray300}" FontSize="12" />
+        </Border>
+
+        <CollectionView Grid.Row="2"
+                        ItemsSource="{Binding Items}"
+                        SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:TripSnapshot">
+                    <SwipeView>
+                        <SwipeView.RightItems>
+                            <SwipeItems Mode="Execute">
+                                <SwipeItem Text="Delete"
+                                           x:DataType="{x:Null}"
+                                           BackgroundColor="#C0392B"
+                                           Command="{Binding BindingContext.DeleteCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                           CommandParameter="{Binding .}" />
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+
+                        <Border BackgroundColor="{StaticResource Gray900}" StrokeThickness="0" Padding="14" Margin="0,0,0,12">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="16" />
+                            </Border.StrokeShape>
+
+                            <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto" RowSpacing="6" ColumnSpacing="10">
+                                <Label Text="{Binding TripID}" FontFamily="OpenSansSemibold" TextColor="{StaticResource White}" />
+                                <Label Grid.Column="1"
+                                       Text="{Binding SavedAtUtc, StringFormat='{0:yyyy-MM-dd HH:mm} UTC'}"
+                                       TextColor="{StaticResource Gray400}"
+                                       FontSize="12"
+                                       HorizontalTextAlignment="End" />
+
+                                <Label Grid.Row="1" Grid.ColumnSpan="2"
+                                       Text="{Binding LocationData}"
+                                       TextColor="{StaticResource Gray200}"
+                                       FontSize="12"
+                                       LineBreakMode="TailTruncation"
+                                       MaxLines="2" />
+
+                                <Label Grid.Row="2" Grid.ColumnSpan="2"
+                                       Text="Saved record"
+                                       TextColor="{StaticResource Gray500}"
+                                       FontSize="11" />
+                            </Grid>
+                        </Border>
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

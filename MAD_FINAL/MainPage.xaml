@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:MAD_FINAL.ViewModels"
+             x:Class="MAD_FINAL.MainPage"
+             x:DataType="viewModels:MainPageViewModel"
+             BackgroundColor="{StaticResource OffBlack}">
+
+    <Grid>
+        <WebView x:Name="MapWebView"
+                 Navigating="OnWebViewNavigating"
+                 Navigated="OnWebViewNavigated">
+            <WebView.Source>
+                <HtmlWebViewSource Html="{Binding MapHtml}" />
+            </WebView.Source>
+        </WebView>
+
+        <Border VerticalOptions="Start"
+                Margin="16,22,16,0"
+                BackgroundColor="#CC141414"
+                StrokeThickness="0"
+                Padding="14,12">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="18" />
+            </Border.StrokeShape>
+            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto" RowSpacing="4" ColumnSpacing="12">
+                <Label Text="MAD_FINAL Navigation"
+                       FontFamily="OpenSansSemibold"
+                       FontSize="22"
+                       TextColor="{StaticResource White}" />
+                <Button Grid.Column="1"
+                        Text="My Location"
+                        Command="{Binding CenterOnCurrentCommand}"
+                        BackgroundColor="{StaticResource Gray950}"
+                        TextColor="{StaticResource White}"
+                        CornerRadius="12"
+                        Padding="14,10" />
+                <Label Grid.Row="1"
+                       Text="{Binding DestinationStatus}"
+                       FontSize="12"
+                       TextColor="{StaticResource Gray200}" />
+            </Grid>
+        </Border>
+
+        <Border x:Name="BottomSheet"
+                VerticalOptions="End"
+                Margin="16,0,16,16"
+                BackgroundColor="#E6141414"
+                StrokeThickness="0"
+                Padding="0">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="22" />
+            </Border.StrokeShape>
+
+            <Grid RowDefinitions="Auto,*" ColumnDefinitions="*" Padding="16" RowSpacing="10">
+                <Grid x:Name="BottomSheetHandle" HeightRequest="28">
+                    <Grid.GestureRecognizers>
+                        <PanGestureRecognizer PanUpdated="OnBottomSheetPanUpdated" />
+                        <TapGestureRecognizer Tapped="OnBottomSheetHandleTapped" />
+                    </Grid.GestureRecognizers>
+                    <Border BackgroundColor="{StaticResource Gray900}"
+                            StrokeThickness="0"
+                            HeightRequest="6"
+                            WidthRequest="52"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="3" />
+                        </Border.StrokeShape>
+                    </Border>
+                </Grid>
+
+                <ScrollView Grid.Row="1">
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*" RowSpacing="10">
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <Border BackgroundColor="{StaticResource Gray900}" StrokeThickness="0" Padding="12">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="16" />
+                            </Border.StrokeShape>
+                        <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*">
+                            <Label Text="Current" FontFamily="OpenSansSemibold" TextColor="{StaticResource White}" />
+                            <Label Grid.Row="1" Text="{Binding CurrentLatLong}" TextColor="{StaticResource Gray200}" FontSize="12" />
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Column="1" BackgroundColor="{StaticResource Gray900}" StrokeThickness="0" Padding="12">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="16" />
+                        </Border.StrokeShape>
+                        <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*">
+                            <Label Text="Destination" FontFamily="OpenSansSemibold" TextColor="{StaticResource White}" />
+                            <Label Grid.Row="1" Text="{Binding SelectedLatLong}" TextColor="{StaticResource Gray200}" FontSize="12" />
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <Entry Grid.Row="1"
+                       Text="{Binding TripId}"
+                       Placeholder="Trip ID (min 4, alphanumeric)"
+                       TextColor="{StaticResource White}"
+                       PlaceholderColor="{StaticResource Gray500}"
+                       BackgroundColor="{StaticResource Gray950}"
+                       ClearButtonVisibility="WhileEditing" />
+
+                <Label Grid.Row="2"
+                       Text="{Binding TripIdError}"
+                       TextColor="#FF6B6B"
+                       IsVisible="{Binding HasTripIdError}"
+                       FontSize="12" />
+
+                <Grid Grid.Row="3" ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <Button Text="Save Trip"
+                            Command="{Binding SaveCommand}"
+                            BackgroundColor="{StaticResource Primary}"
+                            TextColor="{StaticResource White}"
+                            CornerRadius="14"
+                            Padding="12" />
+                    <Button Grid.Column="1"
+                            Text="Start Navigation"
+                            Command="{Binding StartNavigationCommand}"
+                            BackgroundColor="#1f7a4d"
+                            TextColor="{StaticResource White}"
+                            CornerRadius="14"
+                            Padding="12" />
+                </Grid>
+
+                <Grid Grid.Row="4" ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                    <Label Text="{Binding ConnectivityStatus}" TextColor="{StaticResource Gray400}" FontSize="12" VerticalTextAlignment="Center" />
+                    <Button Grid.Column="1"
+                            Text="History"
+                            Command="{Binding GoToHistoryCommand}"
+                            BackgroundColor="{StaticResource Gray950}"
+                            TextColor="{StaticResource White}"
+                            CornerRadius="14"
+                            Padding="14,10" />
+                </Grid>
+
+                <Label Grid.Row="5"
+                       Text="{Binding SensorError}"
+                       TextColor="#FF6B6B"
+                       IsVisible="{Binding HasSensorError}"
+                       FontSize="12" />
+
+                <Label Grid.Row="6"
+                       Text="{Binding SaveStatus}"
+                       TextColor="{StaticResource Gray300}"
+                       IsVisible="{Binding HasSaveStatus}"
+                       FontSize="12" />
+                    </Grid>
+                </ScrollView>
+            </Grid>
+        </Border>
+    </Grid>
+
+</ContentPage>
